@@ -9,6 +9,7 @@ public class MultiThreadedApisApplication {
 	public static void main(String[] args) {
 
 		SpringApplication.run(MultiThreadedApisApplication.class, args);
+		System.out.println("Successfully started server!");
 	}
 
 }
