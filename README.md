@@ -1,2 +1,2 @@
 # multi-threaded-api
-This project will deal with integrating threads into API's, so multiple users can access an endpoint at the same time.
+This project will deal with using threads in the spring framework to learn about concurrency.
