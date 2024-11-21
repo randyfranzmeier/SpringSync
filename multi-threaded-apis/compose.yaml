@@ -8,4 +8,4 @@ services:
       - 'MYSQL_ROOT_PASSWORD=root'
       - 'MYSQL_USER=guest'
     ports:
-      - '3323:3306'
+      - '3306:3306'
