@@ -1,17 +1,21 @@
 import React, {useEffect, useRef, useState} from 'react';
 import PropTypes from 'prop-types';
-import {NoThreadsPlayerWrapper, ResponseContainer} from './create-players-no-threads.styled';
-import {Alert, Button, Grid2, TextField} from "@mui/material";
+import {NoThreadsPlayerWrapper, ResponseContainer, TopMargin} from './create-players-no-threads.styled';
+import {Alert, Button, Grid2, LinearProgress, TextField} from "@mui/material";
 import {PLAYER} from "../../constants/Players";
 import {API_URLS} from "../../constants/endpoints";
 import {Player} from "../../models/Player";
 
 
 function NoThreadsPlayers () {
+    //Bad, but this works for now
+    let controller = useRef(null);
     let numberPlayersRef = useRef(0);
     const [errorText, setErrorText] = useState("");
     const [error, setError] = useState(false);
     const [response, setResponse] = useState(null)
+    const [isWaiting, setIsWaiting] = useState(false);
+    const [buttonText, setButtonText] = useState("Create")
 
 
     let ValidateNumPlayers = () => {
@@ -40,20 +44,36 @@ function NoThreadsPlayers () {
 
         return fetch(fullUrl, {
             method: "GET",
+            signal: controller.current.signal,
             mode: "cors",
             headers: { "Content-Type": "application/json" }
         })
     }
 
     let CreatePlayers = async () => {
-        if (ValidateNumPlayers()) {
-            // eliminate existing error messages
-            setError(false);
-            const res = await getPlayersAsync().catch(error => console.log('err: ', error));
-            if (res.ok) {
-                let playerResponse = await res.json();
-                let player = await new Player(playerResponse.playersCreated, playerResponse.time);
-                setResponse(player)
+        let newButtonText = buttonText === "Create"? "Cancel": "Create";
+        console.log("Button text: ", newButtonText);
+        setButtonText(newButtonText);
+        if (newButtonText === "Create") {
+            //cancel
+            controller.current?.abort();
+            setIsWaiting(false);
+            setResponse(null);
+        }
+        else {
+            if (ValidateNumPlayers()) {
+                controller.current = new AbortController();
+                // eliminate existing error messages
+                setError(false);
+                setIsWaiting(true);
+                const res = await getPlayersAsync().catch(error => console.log('err: ', error));
+                if (res?.ok) {
+                    let playerResponse = await res.json();
+                    let player = await new Player(playerResponse.playersCreated, playerResponse.time);
+                    setIsWaiting(false);
+                    setButtonText("Create")
+                    setResponse(player)
+                }
             }
         }
 
@@ -70,9 +90,14 @@ function NoThreadsPlayers () {
                     <TextField label="Number of players" color="secondary" inputRef={numberPlayersRef} type="number" />
                 </Grid2>
                 <Grid2 size={6}>
-                    <Button variant="outlined" onClick={CreatePlayers}>Create</Button>
+                    <Button variant="outlined" onClick={CreatePlayers}>{buttonText}</Button>
                 </Grid2>
             </Grid2>
+            {isWaiting && <Grid2 size={12}>
+                <TopMargin>
+                    <LinearProgress />
+                </TopMargin>
+            </Grid2>}
             {response && <ResponseContainer>
                 <div style={{width: 50 + "%",  border: 1 + "px " + "solid " + "#e0dcdc"}}>
                 <h3>Response Details</h3>

@@ -13,3 +13,7 @@ export const ResponseContainer = styled.div
     margin-top: 5%;
 `;
 
+export const TopMargin = styled.div
+`
+    margin-top: 3%;
+`;
