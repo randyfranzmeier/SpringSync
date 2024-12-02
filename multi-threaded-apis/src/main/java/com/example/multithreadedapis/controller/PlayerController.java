@@ -1,5 +1,5 @@
 package com.example.multithreadedapis.controller;
-import com.example.entity.PlayerResponse;
+import com.example.response.PlayerResponse;
 import com.example.multithreadedapis.services.PlayerService;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
