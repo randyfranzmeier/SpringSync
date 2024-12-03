@@ -27,14 +27,9 @@ public class PlayerController {
         if (numPlayers < 1) {
             throw new IllegalArgumentException("Number of players must be greater than 0");
         }
-        //do everything one thread at a time (can't reuse threads)
-        for (int i = 0; i < numPlayers; i++) {
-            Thread thread = new Thread (() -> {
-                System.out.println(PlayerService.CreateAndGetRandomPlayer());
-            });
-            thread.start();
-            thread.join(); //wait for thread to finish
-        }
+
+        playerService.CreateNumPlayersSingleThread(numPlayers);
+
         long endTime = System.currentTimeMillis();
         PlayerResponse pr = new PlayerResponse(endTime-startTime, numPlayers);
         ObjectMapper mapper = new ObjectMapper();
@@ -42,15 +37,16 @@ public class PlayerController {
         return ResponseEntity.ok(mapper.writeValueAsString(pr));
     }
 
-    @GetMapping("/player/thread-pool/{numPlayers}")
-    public ResponseEntity<String> getPlayerThreadPool(@PathVariable int numPlayers) {
+    @GetMapping("/player/{numPlayers}/threadpool/{numThreads}")
+    public ResponseEntity<String> getPlayerThreadPool(@PathVariable int numPlayers, @PathVariable int numThreads) throws InterruptedException {
         try {
-            long startTime = System.currentTimeMillis();
-            ExecutorService executor = Executors.newFixedThreadPool(numPlayers);
-            for (int i = 0; i < numPlayers; i++) {
-                executor.submit(() -> {System.out.println(PlayerService.CreateAndGetRandomPlayer());});
+            if (numThreads < 1 || numThreads > 20) {
+                return ResponseEntity.badRequest().body("");
             }
-            executor.shutdown(); //wait for all the threads to finish, then close down the service
+            long startTime = System.currentTimeMillis();
+
+            playerService.CreateNumPlayersMultiThread(numPlayers, numThreads);
+
             long endTime = System.currentTimeMillis();
             PlayerResponse pr = new PlayerResponse(endTime-startTime, numPlayers);
             ObjectMapper mapper = new ObjectMapper();
