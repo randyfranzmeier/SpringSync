@@ -1,4 +1,5 @@
 package com.example.multithreadedapis.controller;
+import com.example.request.ThreadedPlayer;
 import com.example.response.PlayerResponse;
 import com.example.multithreadedapis.services.PlayerService;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -37,18 +38,18 @@ public class PlayerController {
         return ResponseEntity.ok(mapper.writeValueAsString(pr));
     }
 
-    @GetMapping("/player/{numPlayers}/threadpool/{numThreads}")
-    public ResponseEntity<String> getPlayerThreadPool(@PathVariable int numPlayers, @PathVariable int numThreads) throws InterruptedException {
+    @PostMapping("/player/threadpool")
+    public ResponseEntity<String> getPlayerThreadPool(@RequestBody ThreadedPlayer request) throws InterruptedException {
         try {
-            if (numThreads < 1 || numThreads > 20) {
+            if (request.getNumThreads() < 1 || request.getNumThreads() > 20) {
                 return ResponseEntity.badRequest().body("");
             }
             long startTime = System.currentTimeMillis();
 
-            playerService.CreateNumPlayersMultiThread(numPlayers, numThreads);
+            playerService.CreateNumPlayersMultiThread(request.getNumPlayers(), request.getNumThreads());
 
             long endTime = System.currentTimeMillis();
-            PlayerResponse pr = new PlayerResponse(endTime-startTime, numPlayers);
+            PlayerResponse pr = new PlayerResponse(endTime-startTime, request.getNumPlayers());
             ObjectMapper mapper = new ObjectMapper();
             mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
             return ResponseEntity.ok(mapper.writeValueAsString(pr));
