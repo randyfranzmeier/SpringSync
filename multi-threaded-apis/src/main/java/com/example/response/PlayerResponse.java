@@ -4,7 +4,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class PlayerResponse { //TODO add response to include threads used
+public class PlayerResponse {
     Long time;
     int playersCreated;
     public PlayerResponse(Long time, int playersCreated) {
