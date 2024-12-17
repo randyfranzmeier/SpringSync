@@ -64,6 +64,8 @@ function NoThreadsPlayers () {
         }
         else {
             if (ValidateNumPlayers()) {
+                //reset response
+                setResponse(null);
                 controller.current = new AbortController();
                 // eliminate existing error messages
                 setError(false);
