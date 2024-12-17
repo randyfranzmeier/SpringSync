@@ -8,3 +8,14 @@ export class Player {
     }
 
 }
+
+export class ThreadedPlayerRequest {
+    numThreads;
+    numPlayers;
+
+    constructor(numThreads, numPlayers) {
+        this.numThreads = numThreads;
+        this.numPlayers = numPlayers;
+    }
+
+}
