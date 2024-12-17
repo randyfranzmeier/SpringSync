@@ -1,4 +1,7 @@
-### GET request to server
-GET http://localhost:8080/api/player/100/threadpool/20
+POST http://localhost:8080/api/player/threadpool
+Content-Type: application/json
 
-###
+{
+"numThreads": 10,
+"numPlayers": 10
+}
