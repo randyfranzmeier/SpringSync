@@ -1,14 +1,14 @@
 import React, {useEffect, useRef, useState} from 'react';
 import PropTypes from 'prop-types';
-import {NoThreadsPlayerWrapper, ResponseContainer, TopMargin} from './create-players-no-threads.styled';
+import {NoThreadsPlayerWrapper} from './create-players-no-threads.styled';
 import {Alert, Button, Grid2, LinearProgress, TextField} from "@mui/material";
 import {PLAYER} from "../../constants/Players";
 import {API_URLS} from "../../constants/endpoints";
 import {Player} from "../../models/Player";
+import {ResponseContainer, TopMargin} from "../shared/component-styles";
 
 
 function NoThreadsPlayers () {
-    //Bad, but this works for now
     let controller = useRef(null);
     let numberPlayersRef = useRef(0);
     const [errorText, setErrorText] = useState("");
@@ -22,16 +22,19 @@ function NoThreadsPlayers () {
         if (numberPlayersRef.current.value.length === 0) {
             setError(true);
             setErrorText("Please enter the number of players");
+            setButtonText('Create');
             return false;
         }
         else if (numberPlayersRef.current.value <= 0) {
             setError(true);
             setErrorText("You must create at least 1 player");
+            setButtonText('Create');
             return false;
         }
         else if (numberPlayersRef.current.value > PLAYER.CREATE_LIMIT) {
             setError(true);
             setErrorText(`You must enter a number less than or equal to ${PLAYER.CREATE_LIMIT}`);
+            setButtonText('Create');
             return false;
         }
         else {
@@ -52,7 +55,6 @@ function NoThreadsPlayers () {
 
     let CreatePlayers = async () => {
         let newButtonText = buttonText === "Create"? "Cancel": "Create";
-        console.log("Button text: ", newButtonText);
         setButtonText(newButtonText);
         if (newButtonText === "Create") {
             //cancel
@@ -81,7 +83,7 @@ function NoThreadsPlayers () {
 
     return (
         <NoThreadsPlayerWrapper>
-            <h4>Create a certain amount of randomly-generated sports players and see how long it takes to complete</h4>
+            <h4>Enter the number of players you wish to generate</h4>
             <Grid2 container spacing={2}>
                 {error && <Grid2 size={12}>
                     <Alert severity="error" onClose={() =>{setError(false)}}>{errorText}</Alert>
@@ -112,7 +114,5 @@ function NoThreadsPlayers () {
 }
 
 NoThreadsPlayers.propTypes = {};
-
-NoThreadsPlayers.defaultProps = {};
 
 export default NoThreadsPlayers;
