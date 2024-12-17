@@ -11,6 +11,5 @@ const Nav = () => (
 
 Nav.propTypes = {};
 
-Nav.defaultProps = {};
 
 export default Nav;

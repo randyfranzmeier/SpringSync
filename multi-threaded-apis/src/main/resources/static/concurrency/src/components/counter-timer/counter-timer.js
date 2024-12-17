@@ -10,6 +10,4 @@ const CounterTimer = () => (
 
 CounterTimer.propTypes = {};
 
-CounterTimer.defaultProps = {};
-
 export default CounterTimer;
