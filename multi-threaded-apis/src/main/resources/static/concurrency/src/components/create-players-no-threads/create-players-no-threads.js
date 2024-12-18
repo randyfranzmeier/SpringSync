@@ -1,24 +1,26 @@
 import React, {useEffect, useRef, useState} from 'react';
-import PropTypes from 'prop-types';
-import {NoThreadsPlayerWrapper} from './create-players-no-threads.styled';
-import {Alert, Button, Grid2, LinearProgress, TextField} from "@mui/material";
+import {NoThreadsPlayerWrapper, PlayersWithThreadsWrapper} from './create-players-no-threads.styled';
+import {Alert, Button, Grid2, LinearProgress, TextField, Divider} from "@mui/material";
 import {PLAYER} from "../../constants/Players";
 import {API_URLS} from "../../constants/endpoints";
-import {Player} from "../../models/Player";
+import {Player, ThreadedPlayerRequest} from "../../models/Player";
 import {ResponseContainer, TopMargin} from "../shared/component-styles";
+import {THREAD} from "../../constants/Threads";
 
 
-function NoThreadsPlayers () {
+function ThreadsPlayers () {
+
     let controller = useRef(null);
+    let numberThreadsRef = useRef(0);
     let numberPlayersRef = useRef(0);
     const [errorText, setErrorText] = useState("");
     const [error, setError] = useState(false);
-    const [response, setResponse] = useState(null)
+    const [response, setResponse] = useState(null);
     const [isWaiting, setIsWaiting] = useState(false);
-    const [buttonText, setButtonText] = useState("Create")
+    const [buttonText, setButtonText] = useState("Create");
 
 
-    let ValidateNumPlayers = () => {
+    let ValidateNumPlayers = (containsThreads) => {
         if (numberPlayersRef.current.value.length === 0) {
             setError(true);
             setErrorText("Please enter the number of players");
@@ -38,8 +40,40 @@ function NoThreadsPlayers () {
             return false;
         }
         else {
+            if (containsThreads) {
+                if (numberThreadsRef.current.value.length === 0) {
+                    setError(true);
+                    setErrorText("Please enter the number of threads");
+                    setButtonText("create");
+                    return false;
+                }
+                else if (numberThreadsRef.current.value <= 0) {
+                    setError(true);
+                    setErrorText("You must have at least 1 thread");
+                    setButtonText('Create');
+                    return false;
+                }
+                else if (numberThreadsRef.current.value > THREAD.LIMIT) {
+                    setError(true);
+                    setErrorText(`You must enter a number less than or equal to ${THREAD.LIMIT}`);
+                    setButtonText('Create');
+                    return false;
+                }
+            }
             return true;
         }
+    }
+
+    let getPlayersThreadedAsync = async () => {
+        const body = new ThreadedPlayerRequest(Number(numberThreadsRef.current.value), Number(numberPlayersRef.current.value));
+        console.log("players: ", body);
+        return fetch(API_URLS.CreatePlayersWithThreads, {
+            method: "POST",
+            signal: controller.current.signal,
+            mode: "cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body)
+        });
     }
 
     let getPlayersAsync = async () => {
@@ -53,6 +87,35 @@ function NoThreadsPlayers () {
         })
     }
 
+    let CreatePlayersMultipleThreads = async () => {
+        let newButtonText = buttonText === "Create"? "Cancel": "Create";
+        setButtonText(newButtonText);
+        if (newButtonText === "Create") {
+            //cancel
+            controller.current?.abort();
+            setIsWaiting(false);
+            setResponse(null);
+        }
+        else {
+            if (ValidateNumPlayers(true)) {
+                //reset response
+                setResponse(null);
+                controller.current = new AbortController();
+                // eliminate existing error messages
+                setError(false);
+                setIsWaiting(true);
+                const res = await getPlayersThreadedAsync().catch(error => console.log('err: ', error));
+                if (res?.ok) {
+                    let playerResponse = await res.json();
+                    let player = await new Player(playerResponse.playersCreated, playerResponse.time);
+                    setIsWaiting(false);
+                    setButtonText("Create")
+                    setResponse(player)
+                }
+            }
+        }
+    }
+
     let CreatePlayers = async () => {
         let newButtonText = buttonText === "Create"? "Cancel": "Create";
         setButtonText(newButtonText);
@@ -63,7 +126,7 @@ function NoThreadsPlayers () {
             setResponse(null);
         }
         else {
-            if (ValidateNumPlayers()) {
+            if (ValidateNumPlayers(false)) {
                 //reset response
                 setResponse(null);
                 controller.current = new AbortController();
@@ -84,6 +147,7 @@ function NoThreadsPlayers () {
     }
 
     return (
+        <>
         <NoThreadsPlayerWrapper>
             <h4>Enter the number of players you wish to generate</h4>
             <Grid2 container spacing={2}>
@@ -109,12 +173,42 @@ function NoThreadsPlayers () {
                 <h4>Players Created: {response.playersCreated}</h4>
                 </div>
             </ResponseContainer>}
-
-
         </NoThreadsPlayerWrapper>
-        )
+
+
+    <PlayersWithThreadsWrapper>
+        <h4>Now enter the number of threads to use to generate each player</h4>
+        <Grid2 container spacing={2}>
+            {error && <Grid2 size={12}>
+                <Alert severity="error" onClose={() =>{setError(false)}}>{errorText}</Alert>
+            </Grid2>}
+            <Grid2 size={4}>
+                <TextField label="Number of players" color="secondary" inputRef={numberPlayersRef} type="number" />
+            </Grid2>
+            <Grid2 size={4}>
+                <TextField label="Threads" color="secondary" inputRef={numberThreadsRef} type="number" />
+            </Grid2>
+            <Grid2 size={4}>
+                <Button variant="outlined" onClick={CreatePlayersMultipleThreads}>{buttonText}</Button>
+            </Grid2>
+        </Grid2>
+        {isWaiting && <Grid2 size={12}>
+            <TopMargin>
+                <LinearProgress />
+            </TopMargin>
+        </Grid2>}
+        {response && <ResponseContainer>
+            <div style={{width: 50 + "%",  border: 1 + "px " + "solid " + "#e0dcdc"}}>
+                <h3>Response Details</h3>
+                <h4>Time: {response.time} ms</h4>
+                <h4>Players Created: {response.playersCreated}</h4>
+            </div>
+        </ResponseContainer>}
+    </PlayersWithThreadsWrapper>
+        </>
+        );
 }
 
-NoThreadsPlayers.propTypes = {};
+ThreadsPlayers.propTypes = {};
 
-export default NoThreadsPlayers;
+export default ThreadsPlayers;

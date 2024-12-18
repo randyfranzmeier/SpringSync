@@ -1,11 +1,11 @@
 /* eslint-disable */
-import NoThreadsPlayers from './create-players-no-threads';
+import ThreadsPlayers from './create-players-no-threads';
 
 export default {
   title: "create-players-no-threads",
 };
 
-export const Default = () => <NoThreadsPlayers />;
+export const Default = () => <ThreadsPlayers />;
 
 Default.story = {
   name: 'default',
