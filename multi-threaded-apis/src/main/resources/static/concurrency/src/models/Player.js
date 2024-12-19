@@ -19,3 +19,18 @@ export class ThreadedPlayerRequest {
     }
 
 }
+
+// For frontend to handle player creation and error handling
+export class PlayerHandler {
+    errorText;
+    error;
+    buttonText;
+    isWaiting;
+
+    constructor(errorText, error, buttonText, isWaiting) {
+        this.errorText = errorText;
+        this.error = error;
+        this.buttonText = buttonText;
+        this.isWaiting = isWaiting;
+    }
+}
