@@ -1,5 +1,5 @@
 /* eslint-disable */
-import ThreadsPlayers from './create-players-no-threads';
+import ThreadsPlayers from './threads-players';
 
 export default {
   title: "create-players-no-threads",
