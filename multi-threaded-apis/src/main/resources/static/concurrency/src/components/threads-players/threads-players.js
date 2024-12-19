@@ -7,7 +7,7 @@ import {Player, PlayerHandler, ThreadedPlayerRequest} from "../../models/Player"
 import {ResponseContainer, TopMargin} from "../shared/component-styles";
 import {THREAD} from "../../constants/Threads";
 
-
+// TODO put question mark icon so users can learn more about what the API does
 function ThreadsPlayers () {
 
     let controller = useRef(null);

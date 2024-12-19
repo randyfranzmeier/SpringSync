@@ -1,8 +1,8 @@
 import './App.css';
 import Nav from "./components/nav/nav";
-import {Accordion, AccordionDetails, AccordionSummary, Card, CardContent, Divider, Typography} from "@mui/material";
+import {Accordion, AccordionDetails, AccordionSummary, Card, CardContent, Divider, Typography, Grid2} from "@mui/material";
 import {ExpandMore} from "@mui/icons-material";
-import ThreadsPlayers from "./components/create-players-no-threads/create-players-no-threads";
+import ThreadsPlayers from "./components/threads-players/threads-players";
 import CounterTimer from "./components/counter-timer/counter-timer";
 
 
@@ -32,17 +32,21 @@ function App() {
             <div className="simulation-container">
                 <h1>Select one of the below options to explore and learn about multithreading</h1>
 
-                <Divider className="divider"/>
+                {/*<Divider className="divider"/>*/}
+                <Grid2 container spacing={2}>
+                    <Grid2 size={6}>
+                        <div className="card-container">
+                            <Card variant="outlined">{ThreadsPlayerCard}</Card>
+                        </div>
+                    </Grid2>
 
-                <div className="card-container">
-                    <Card variant="outlined">{ThreadsPlayerCard}</Card>
-                </div>
-
-                <Divider className="divider"/>
-
-                <div className="card-container">
-                    <Card variant="outlined">{counterTimerCard}</Card>
-                </div>
+                    <Grid2 size={6}>
+                        <div className="card-container">
+                            <Card variant="outlined">{counterTimerCard}</Card>
+                        </div>
+                    </Grid2>
+                    {/*<Divider className="divider"/>*/}
+                </Grid2>
             </div>
         </div>
     );

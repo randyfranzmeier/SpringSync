@@ -43,13 +43,11 @@
 }
 
 .simulation-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+ margin-left: 2%;
+  margin-right: 2%;
 }
 
 .card-container {
-  width: 50%;
+  width: 100%;
 
 }
