@@ -14,3 +14,9 @@ export const TopMargin = styled.div
     `
     margin-top: 3%;
 `;
+
+export const InstructionHeader = styled.div
+`
+    color: gray;
+    font-style: italic;
+`
