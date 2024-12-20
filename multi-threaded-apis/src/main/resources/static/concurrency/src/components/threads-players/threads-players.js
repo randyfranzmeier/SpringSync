@@ -4,7 +4,7 @@ import {Alert, Button, Grid2, LinearProgress, TextField, Divider} from "@mui/mat
 import {PLAYER} from "../../constants/Players";
 import {API_URLS} from "../../constants/endpoints";
 import {Player, PlayerHandler, ThreadedPlayerRequest} from "../../models/Player";
-import {ResponseContainer, TopMargin} from "../shared/component-styles";
+import {InstructionHeader, ResponseContainer, TopMargin} from "../shared/component-styles";
 import {THREAD} from "../../constants/Threads";
 
 // TODO put question mark icon so users can learn more about what the API does
@@ -150,7 +150,9 @@ function ThreadsPlayers () {
     return (
         <>
         <NoThreadsPlayerWrapper>
+            <InstructionHeader>
             <h4>Enter the number of players you wish to generate</h4>
+            </InstructionHeader>
             <Grid2 container spacing={2}>
                 {singleThreadPlayerHandler.error && <Grid2 size={12}>
                     <Alert severity="error" onClose={
@@ -180,7 +182,9 @@ function ThreadsPlayers () {
 
 
     <PlayersWithThreadsWrapper>
-        <h4>Now enter the number of threads to use to generate each player</h4>
+        <InstructionHeader>
+            <h4>Now enter the number of threads to use to generate each player</h4>
+        </InstructionHeader>
         <Grid2 container spacing={2}>
             {threadedPlayerHandler.error && <Grid2 size={12}>
                 <Alert severity="error" onClose={
