@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @Data
 @NoArgsConstructor
-public class ThreadedCounter {
+public class ThreadedPlayerRequest {
     private int numThreads;
-    private int loopLimit;
+    private int numPlayers;
 }
