@@ -1,5 +1,4 @@
 package com.example.entity;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,6 +19,7 @@ public class Player {
         this.team = team;
     }
 
+    // Default constructor
     Player() {
 
     }
