@@ -21,6 +21,10 @@ private final ReadWriteLock lock = new ReentrantReadWriteLock();
 private int value;
 private int loopLimit;
 
+/**
+ * The purpose of the below comments are to show an alternative way
+ * to deal with threads using a read write lock
+ */
 //public int getValueSync() {
 //    lock.readLock().lock();
 //    int val = this.getValue();

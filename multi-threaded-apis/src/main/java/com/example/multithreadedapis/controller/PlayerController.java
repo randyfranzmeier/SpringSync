@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api")
 public class PlayerController {
-    //inject service
+
     PlayerService playerService;
     //Automatic dependency injection
     @Autowired
@@ -22,7 +22,7 @@ public class PlayerController {
     }
 
     @GetMapping(value = "/player/nothreading/{numPlayers}", produces = {"application/json"})
-    public ResponseEntity<String> getPlayerNoThreading(@PathVariable int numPlayers) throws JsonProcessingException, InterruptedException { //to get a path variable, use @PathVariable annotation
+    public ResponseEntity<String> getPlayerNoThreading(@PathVariable int numPlayers) throws JsonProcessingException, InterruptedException { 
         long startTime = System.currentTimeMillis();
         if (numPlayers < 1) {
             throw new IllegalArgumentException("Number of players must be greater than 0");
@@ -32,6 +32,8 @@ public class PlayerController {
 
         long endTime = System.currentTimeMillis();
         PlayerResponse pr = new PlayerResponse(endTime-startTime, numPlayers);
+
+        // Serialize object
         ObjectMapper mapper = new ObjectMapper();
         mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
         return ResponseEntity.ok(mapper.writeValueAsString(pr));
@@ -40,6 +42,7 @@ public class PlayerController {
     @PostMapping(value = "/player/threadpool", produces = {"application/json"})
     public ResponseEntity<String> getPlayerThreadPool(@RequestBody ThreadedPlayerRequest request) throws InterruptedException {
         try {
+            // Catch user input error
             if (request.getNumThreads() < 1 || request.getNumThreads() > 20) {
                 return ResponseEntity.badRequest().body("");
             }
@@ -49,6 +52,7 @@ public class PlayerController {
 
             long endTime = System.currentTimeMillis();
             PlayerResponse pr = new PlayerResponse(endTime-startTime, request.getNumPlayers());
+            // Serialize object
             ObjectMapper mapper = new ObjectMapper();
             mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
             return ResponseEntity.ok(mapper.writeValueAsString(pr));

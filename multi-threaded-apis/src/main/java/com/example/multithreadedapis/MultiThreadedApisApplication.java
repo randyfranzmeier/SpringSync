@@ -14,6 +14,7 @@ public class MultiThreadedApisApplication {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
+				// Allow all origins for now as this is only enabled in a local dev environment
 				registry.addMapping("/**").allowedOrigins("*");
 			}
 		};

@@ -1,16 +1,13 @@
 package com.example.multithreadedapis.services;
-
 import com.example.entity.Player;
 import com.example.entity.Sport;
 import com.example.entity.Team;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 @Service
 public class PlayerService {
@@ -48,11 +45,13 @@ public class PlayerService {
     }
 
     public void CreateNumPlayersMultiThread(int numPlayers, int numThreads) throws InterruptedException {
+        // Create threads via thread pool and put them to work
         ExecutorService executor = Executors.newFixedThreadPool(numThreads);
         for (int i = 0; i < numPlayers; i++) {
             executor.submit(() -> {System.out.println(CreateAndGetRandomPlayer());});
         }
-        executor.shutdown(); //wait for all the threads to finish, then close down the service
+        // Wait for all the threads to finish, then close down the service
+        executor.shutdown(); 
         while (!executor.isTerminated()) {
         }
     }

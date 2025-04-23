@@ -23,11 +23,13 @@ public class CounterController {
 
     @PostMapping(value = "", produces = {"application/json"})
     public ResponseEntity<String> timeToIncrementValueUsingThreads(@RequestBody ThreadedCounter request) {
+        // Validate user input
         if (request.getLoopLimit() <= 0 ||  request.getNumThreads() > 20 || request.getNumThreads() < 1) {
             return ResponseEntity.badRequest().body("");
         }
         try {
             ThreadedCounterResult response = counterService.handleThreadedCounter(request.getNumThreads(), request.getLoopLimit());
+            // Serialize data
             ObjectMapper mapper = new ObjectMapper();
             mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
             return ResponseEntity.ok(mapper.writeValueAsString(response));
