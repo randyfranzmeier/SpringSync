@@ -1,3 +1,4 @@
+// TODO make more generic, functions can be merged to single one
 import React, {useEffect, useRef, useState} from 'react';
 import {NoThreadsPlayerWrapper, PlayersWithThreadsWrapper} from './threads-players.styled';
 import {Alert, Button, Grid2, LinearProgress, TextField, Divider} from "@mui/material";
@@ -6,6 +7,7 @@ import {API_URLS} from "../../constants/endpoints";
 import {Player, PlayerHandler, ThreadedPlayerRequest} from "../../models/Player";
 import {InstructionHeader, ResponseContainer, TopMargin} from "../shared/component-styles";
 import {THREAD} from "../../constants/Threads";
+import { BUTTON_TEXT } from '../../constants/Counter';
 
 // TODO put question mark icon so users can learn more about what the API does
 function ThreadsPlayers () {
@@ -14,14 +16,14 @@ function ThreadsPlayers () {
     let numberThreadsRef = useRef(0);
     let numberPlayersSingleThreadRef = useRef(0);
     let numberPlayersThreadedRef = useRef(0);
-    const [singleThreadPlayerHandler, setSingleThreadPlayerHandler] = useState(new PlayerHandler("", false, "Create", false));
-    const [threadedPlayerHandler, setThreadedPlayerHandler] = useState(new PlayerHandler("", false, "Create", false));
+    const [singleThreadPlayerHandler, setSingleThreadPlayerHandler] = useState(new PlayerHandler("", false, BUTTON_TEXT.CREATE, false));
+    const [threadedPlayerHandler, setThreadedPlayerHandler] = useState(new PlayerHandler("", false, BUTTON_TEXT.CREATE, false));
     const [multiThreadRes, setMultiThreadRes] = useState(null);
     const [singleThreadRes, setSingleThreadRes] = useState(null);
 
 
     let ValidateNumPlayers = (containsThreads) => {
-        const buttonText = "Create";
+        const buttonText = BUTTON_TEXT.CREATE;
 
         if (containsThreads && numberPlayersThreadedRef.current.value.length === 0 || !containsThreads && numberPlayersSingleThreadRef.current
             .value.length === 0) {
@@ -91,11 +93,11 @@ function ThreadsPlayers () {
             headers: { "Content-Type": "application/json" }
         })
     }
-    // Although it's good practice to not repeat yourself, I believe it's best to have different functions for API calls
+    
     let CreatePlayersMultipleThreads = async () => {
-        let newButtonText = threadedPlayerHandler.buttonText === "Create"? "Cancel": "Create";
+        let newButtonText = threadedPlayerHandler.buttonText === BUTTON_TEXT.CREATE? BUTTON_TEXT.CANCEL: BUTTON_TEXT.CREATE;
         setThreadedPlayerHandler(new PlayerHandler("", false, newButtonText, false));
-        if (newButtonText === "Create") {
+        if (newButtonText === BUTTON_TEXT.CREATE) {
             //cancel
             controller.current?.abort();
             setThreadedPlayerHandler(new PlayerHandler("", false, newButtonText, false));
@@ -112,7 +114,7 @@ function ThreadsPlayers () {
                 if (res?.ok) {
                     let playerResponse = await res.json();
                     let player = await new Player(playerResponse.playersCreated, playerResponse.time);
-                    setThreadedPlayerHandler(new PlayerHandler("", false, "Create", false));
+                    setThreadedPlayerHandler(new PlayerHandler("", false, BUTTON_TEXT.CREATE, false));
                     setMultiThreadRes(player);
                 }
             }
@@ -120,9 +122,9 @@ function ThreadsPlayers () {
     }
 
     let CreatePlayersSingleThread = async () => {
-        let newButtonText = singleThreadPlayerHandler.buttonText === "Create"? "Cancel": "Create";
+        let newButtonText = singleThreadPlayerHandler.buttonText === BUTTON_TEXT.CREATE? BUTTON_TEXT.CANCEL: BUTTON_TEXT.CREATE;
         setSingleThreadPlayerHandler(new PlayerHandler("", false, newButtonText));
-        if (newButtonText === "Create") {
+        if (newButtonText === BUTTON_TEXT.CREATE) {
             //cancel
             controller.current?.abort();
             setSingleThreadPlayerHandler(new PlayerHandler("", false, newButtonText));
@@ -139,7 +141,7 @@ function ThreadsPlayers () {
                 if (res?.ok) {
                     let playerResponse = await res.json();
                     let player = await new Player(playerResponse.playersCreated, playerResponse.time);
-                    setSingleThreadPlayerHandler(new PlayerHandler("", false, "Create", false));
+                    setSingleThreadPlayerHandler(new PlayerHandler("", false, BUTTON_TEXT.CREATE, false));
                     setSingleThreadRes(player);
                 }
             }
@@ -156,7 +158,7 @@ function ThreadsPlayers () {
             <Grid2 container spacing={2}>
                 {singleThreadPlayerHandler.error && <Grid2 size={12}>
                     <Alert severity="error" onClose={
-                        () =>{setSingleThreadPlayerHandler(new PlayerHandler("", false, "Create", false))}}>
+                        () =>{setSingleThreadPlayerHandler(new PlayerHandler("", false, BUTTON_TEXT.CREATE, false))}}>
                         {singleThreadPlayerHandler.errorText}</Alert>
                 </Grid2>}
                 <Grid2 size={6}>
@@ -188,7 +190,7 @@ function ThreadsPlayers () {
         <Grid2 container spacing={2}>
             {threadedPlayerHandler.error && <Grid2 size={12}>
                 <Alert severity="error" onClose={
-                    () =>{setThreadedPlayerHandler(new PlayerHandler("", false, "Create", false))}}>
+                    () =>{setThreadedPlayerHandler(new PlayerHandler("", false, BUTTON_TEXT.CREATE, false))}}>
                     {threadedPlayerHandler.errorText}</Alert>
             </Grid2>}
             <Grid2 size={4}>

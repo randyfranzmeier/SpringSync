@@ -2,7 +2,7 @@ import React, {useRef, useState} from 'react';
 import { CounterTimerWrapper } from './counter-timer.styled';
 import {Alert, Button, Grid2, LinearProgress, TextField} from "@mui/material";
 import {InstructionHeader, ResponseContainer, TopMargin} from "../shared/component-styles";
-import {COUNTER} from "../../constants/Counter"
+import {BUTTON_TEXT, COUNTER} from "../../constants/Counter"
 import {THREAD} from "../../constants/Threads";
 import {API_URLS} from "../../constants/endpoints";
 import {CounterRequest, CounterResponse} from "../../models/Counter";
@@ -33,11 +33,11 @@ function CounterTimer () {
     }
 
     let handleCounter = async () => {
-        let newButtonText = buttonText === "Create"? "Cancel": "Create";
+        let newButtonText = buttonText === BUTTON_TEXT.CREATE? BUTTON_TEXT.CANCEL: BUTTON_TEXT.CREATE;
         // Change button text on click
         setButtonText(newButtonText);
-        //Bad... should make Create a constant
-        if (newButtonText === "Create") {
+        
+        if (newButtonText === BUTTON_TEXT.CREATE) {
             //cancel API call
             controller.current?.abort();
             setIsWaiting(false);
@@ -47,13 +47,14 @@ function CounterTimer () {
             if (!numThreadsError && !counterError) {
                 // reset response
                 setResponse(null);
+                // initialize controller for current API call
                 controller.current = new AbortController();
                 // call API
                 const res = await getCounterAsync().catch(error => console.log('err: ', error));
                 if (res?.ok) {
                     let counterResponse = await res.json();
-                    let counter = await new CounterResponse(counterResponse.timeToComplete, counterResponse.endValue);
-                    setButtonText('Create');
+                    let counter = new CounterResponse(counterResponse.timeToComplete, counterResponse.endValue);
+                    setButtonText(BUTTON_TEXT.CREATE);
                     setIsWaiting(false);
                     setResponse(counter);
                 }
