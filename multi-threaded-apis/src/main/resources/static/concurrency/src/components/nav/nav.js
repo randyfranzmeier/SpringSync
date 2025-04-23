@@ -4,7 +4,7 @@ import {NavWrapper, NavBar} from './nav.styled';
 const Nav = () => (
     <NavWrapper>
         <NavBar>
-            Concurrency Simulator
+            SpringSync
         </NavBar>
     </NavWrapper>
 );
