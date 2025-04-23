@@ -1,4 +1,4 @@
-# Multithreaded API's
+# SpringSync
 This project contains 3 Spring Boot API's that deal with threads to enhance my understanding of how they work, especially in Java. The frontend is in React and uses these API's to display information such as how long it took to process transactions with varying (or static) numbers of threads.
 
 # Author
