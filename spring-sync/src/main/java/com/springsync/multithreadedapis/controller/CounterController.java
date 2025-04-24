@@ -1,7 +1,7 @@
-package com.example.multithreadedapis.controller;
-import com.example.multithreadedapis.services.CounterService;
-import com.example.request.ThreadedCounter;
-import com.example.response.ThreadedCounterResult;
+package com.springsync.multithreadedapis.controller;
+import com.springsync.multithreadedapis.services.CounterService;
+import com.springsync.request.ThreadedCounter;
+import com.springsync.response.ThreadedCounterResult;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import org.springframework.beans.factory.annotation.Autowired;

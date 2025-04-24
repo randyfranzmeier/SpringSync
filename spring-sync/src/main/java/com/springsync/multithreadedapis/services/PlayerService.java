@@ -1,7 +1,7 @@
-package com.example.multithreadedapis.services;
-import com.example.entity.Player;
-import com.example.entity.Sport;
-import com.example.entity.Team;
+package com.springsync.multithreadedapis.services;
+import com.springsync.entity.Player;
+import com.springsync.entity.Sport;
+import com.springsync.entity.Team;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;

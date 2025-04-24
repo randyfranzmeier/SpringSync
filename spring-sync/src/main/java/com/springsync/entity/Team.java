@@ -1,4 +1,4 @@
-package com.example.entity;
+package com.springsync.entity;
 import lombok.Getter;
 import lombok.Setter;
 

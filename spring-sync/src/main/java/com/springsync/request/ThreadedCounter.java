@@ -1,4 +1,4 @@
-package com.example.request;
+package com.springsync.request;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

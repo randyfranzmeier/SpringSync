@@ -1,4 +1,4 @@
-package com.example.response;
+package com.springsync.response;
 
 import lombok.Getter;
 import lombok.Setter;

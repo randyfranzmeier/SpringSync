@@ -1,7 +1,7 @@
-package com.example.multithreadedapis.controller;
-import com.example.request.ThreadedPlayerRequest;
-import com.example.response.PlayerResponse;
-import com.example.multithreadedapis.services.PlayerService;
+package com.springsync.multithreadedapis.controller;
+import com.springsync.request.ThreadedPlayerRequest;
+import com.springsync.response.PlayerResponse;
+import com.springsync.multithreadedapis.services.PlayerService;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;

@@ -1,6 +1,6 @@
-package com.example.multithreadedapis.services;
+package com.springsync.multithreadedapis.services;
 
-import com.example.response.ThreadedCounterResult;
+import com.springsync.response.ThreadedCounterResult;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
