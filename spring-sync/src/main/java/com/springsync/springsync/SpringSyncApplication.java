@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
-public class MultiThreadedApisApplication {
+public class SpringSyncApplication {
 
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {
@@ -22,7 +22,7 @@ public class MultiThreadedApisApplication {
 
 	public static void main(String[] args) {
 
-		SpringApplication.run(MultiThreadedApisApplication.class, args);
+		SpringApplication.run(SpringSyncApplication.class, args);
 		System.out.println("Successfully started server!");
 	}
 
