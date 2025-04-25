@@ -2,7 +2,7 @@
 import ThreadsPlayers from './threads-players';
 
 export default {
-  title: "create-players-no-threads",
+  title: "compare-players",
 };
 
 export const Default = () => <ThreadsPlayers />;
