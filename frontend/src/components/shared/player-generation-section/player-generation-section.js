@@ -1,14 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { NoThreadsPlayerWrapper, PlayersWithThreadsWrapper } from './compare-players.styled';
 import { Alert, Button, Grid2, LinearProgress, TextField, Divider } from "@mui/material";
-import { PLAYER } from "../../constants/Players";
-import { API_URLS } from "../../constants/endpoints";
-import { Player, PlayerHandler, ThreadedPlayerRequest } from "../../models/Player";
-import { InstructionHeader, ResponseContainer, TopMargin } from "../shared/component-styles";
-import { THREAD } from "../../constants/Threads";
-import { BUTTON_TEXT } from '../../constants/Counter';
+import { PLAYER } from "../../../constants/Players";
+import { API_URLS } from "../../../constants/endpoints";
+import { Player, PlayerHandler, ThreadedPlayerRequest } from "../../../models/Player";
+import { InstructionHeader, ResponseContainer, TopMargin } from "../component-styles";
+import { THREAD } from "../../../constants/Threads";
+import { BUTTON_TEXT } from '../../../constants/Counter';
 
-function PlayerGenerationSection({ useThreads }) {
+function PlayerGenerationSection({ useThreads = false }) {
    let controller = useRef(null);
    let numberThreadsRef = useRef(0);
    let numberPlayersRef = useRef(0);
@@ -35,21 +34,15 @@ function PlayerGenerationSection({ useThreads }) {
    let validateInputs = () => {
       // validate number of players
       if (numberPlayersRef.current.value.length === 0) {
-         const errorText = "Please enter the number of players";
-         const playerHandler = new PlayerHandler(errorText, true, BUTTON_TEXT.CREATE, false);
-         useThreads ? setPlayerHandler(playerHandler) : setSingleThreadPlayerHandler(playerHandler);
+         setPlayerHandler(new PlayerHandler("Please enter the number of players", true, BUTTON_TEXT.CREATE, false));
          return false;
       }
       else if (numberPlayersRef.current.value <= 0) {
-         const errorText = "You must create at least 1 player";
-         const playerHandler = new PlayerHandler(errorText, true, BUTTON_TEXT.CREATE, false);
-         useThreads ? setPlayerHandler(playerHandler) : setSingleThreadPlayerHandler(playerHandler);
+         setPlayerHandler(new PlayerHandler("You must create at least 1 player", true, BUTTON_TEXT.CREATE, false));
          return false;
       }
       else if (numberPlayersRef.current.value > PLAYER.CREATE_LIMIT) {
-         const errorText = `You must enter a number less than or equal to ${PLAYER.CREATE_LIMIT}`;
-         const playerHandler = new PlayerHandler(errorText, true, BUTTON_TEXT.CREATE, false);
-         useThreads ? setPlayerHandler(playerHandler) : setSingleThreadPlayerHandler(playerHandler);
+         setPlayerHandler(new PlayerHandler(`You must enter a number less than or equal to ${PLAYER.CREATE_LIMIT}`, true, BUTTON_TEXT.CREATE, false));
          return false;
       }
 
@@ -60,7 +53,7 @@ function PlayerGenerationSection({ useThreads }) {
 
    let fetchPlayersAsync = async () => {
       if (useThreads) {
-         const body = new ThreadedPlayerRequest(Number(numberThreadsRef.current.value), Number(numberPlayersThreadedRef.current.value));
+         const body = new ThreadedPlayerRequest(Number(numberThreadsRef.current.value), Number(numberPlayersRef.current.value));
          return fetch(API_URLS.CreatePlayersWithThreads, {
             method: "POST",
             signal: controller.current.signal,
@@ -70,7 +63,7 @@ function PlayerGenerationSection({ useThreads }) {
          });
       }
       else {
-         return fetch(`${API_URLS.CreatePlayerNoThreads}${numberPlayersSingleThreadRef.current.value}`, {
+         return fetch(`${API_URLS.CreatePlayerNoThreads}${numberPlayersRef.current.value}`, {
             method: "GET",
             signal: controller.current.signal,
             mode: "cors",
@@ -80,7 +73,7 @@ function PlayerGenerationSection({ useThreads }) {
    }
 
    let createPlayers = async () => {
-      let newButtonText = threadedPlayerHandler.buttonText === BUTTON_TEXT.CREATE ? BUTTON_TEXT.CANCEL : BUTTON_TEXT.CREATE;
+      let newButtonText = playerHandler.buttonText === BUTTON_TEXT.CREATE ? BUTTON_TEXT.CANCEL : BUTTON_TEXT.CREATE;
       setPlayerHandler(new PlayerHandler("", false, newButtonText, false));
 
       if (newButtonText === BUTTON_TEXT.CREATE) {
@@ -110,6 +103,7 @@ function PlayerGenerationSection({ useThreads }) {
       }
    }
 
+   return (
    <>
       <InstructionHeader>
          {useThreads && <h4>Now enter the number of threads to use to generate each player</h4>}
@@ -143,7 +137,7 @@ function PlayerGenerationSection({ useThreads }) {
             <h4>Players Created: {response.playersCreated}</h4>
          </div>
       </ResponseContainer>}
-   </>
+   </>);
 }
 
 export default PlayerGenerationSection;

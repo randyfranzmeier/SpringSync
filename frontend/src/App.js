@@ -1,23 +1,22 @@
 import './App.css';
 import Nav from "./components/nav/nav";
-import {Accordion, AccordionDetails, AccordionSummary, Card, CardContent, Divider, Typography, Grid2} from "@mui/material";
-import {ExpandMore} from "@mui/icons-material";
-import ThreadsPlayers from "./components/threads-players/threads-players";
+import { Card, CardContent, Grid2 } from "@mui/material";
 import CounterTimer from "./components/counter-timer/counter-timer";
+import ComparePlayers from './components/compare-players/compare-players';
 
 
 function App() {
-    const ThreadsPlayerCard = (
+    const ComparePlayersCard = (
         <>
             <CardContent>
                 <h3>Create players with only one thread</h3>
-                <ThreadsPlayers/>
+                <ComparePlayers/>
             </CardContent>
         </>
     );
 
 
-    const counterTimerCard = (
+    const CounterTimerCard = (
         <>
             <CardContent>
                 <h3>Increment counter with specified limit and threads with no time delay</h3>
@@ -36,13 +35,13 @@ function App() {
                 <Grid2 container spacing={2}>
                     <Grid2 size={6}>
                         <div className="card-container">
-                            <Card variant="outlined">{ThreadsPlayerCard}</Card>
+                            <Card variant="outlined">{ComparePlayersCard}</Card>
                         </div>
                     </Grid2>
 
                     <Grid2 size={6}>
                         <div className="card-container">
-                            <Card variant="outlined">{counterTimerCard}</Card>
+                            <Card variant="outlined">{CounterTimerCard}</Card>
                         </div>
                     </Grid2>
                     {/*<Divider className="divider"/>*/}

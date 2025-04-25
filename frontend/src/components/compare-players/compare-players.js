@@ -9,11 +9,8 @@ let ComparePlayers = () => (
     <>
         <NoThreadsPlayerWrapper>
             <PlayerGenerationSection
-                useThreads={false}
             />
         </NoThreadsPlayerWrapper>
-
-        <Divider />
 
         <PlayersWithThreadsWrapper>
             <PlayerGenerationSection
