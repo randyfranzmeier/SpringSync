@@ -1,4 +1,4 @@
-package com.springsync.multithreadedapis.services;
+package com.springsync.springsync.services;
 import com.springsync.entity.Player;
 import com.springsync.entity.Sport;
 import com.springsync.entity.Team;
