@@ -98,16 +98,6 @@ function CounterTimer() {
                 <h4>Enter the number to count to and the threads used to count to that number</h4>
             </InstructionHeader>
             <Grid2 container spacing={2}>
-                {/* {numThreadsError && <Grid2 size={12}>
-                    <Alert severity="error">
-                        {numThreadsErrorText}
-                    </Alert>
-                </Grid2>}
-                {counterError && <Grid2 size={12}>
-                    <Alert severity="error">
-                        {counterErrorText}
-                    </Alert>
-                </Grid2>} */}
                 <Grid2 size={4}>
                     <TextField onChange={resetCounterError} label="Counter" color="secondary" inputRef={counterRef} type="number" error={counterError} helperText={counterError ? counterErrorText : ""}/>
                 </Grid2>
