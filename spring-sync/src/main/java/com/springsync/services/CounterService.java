@@ -1,4 +1,4 @@
-package com.springsync.springsync.services;
+package com.springsync.services;
 
 import com.springsync.response.ThreadedCounterResult;
 import lombok.Getter;

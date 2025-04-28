@@ -1,7 +1,7 @@
-package com.springsync.springsync.controller;
+package com.springsync.controller;
 import com.springsync.request.ThreadedPlayerRequest;
 import com.springsync.response.PlayerResponse;
-import com.springsync.springsync.services.PlayerService;
+import com.springsync.services.PlayerService;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;

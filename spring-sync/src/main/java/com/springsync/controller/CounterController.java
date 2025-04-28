@@ -1,7 +1,7 @@
-package com.springsync.springsync.controller;
+package com.springsync.controller;
 import com.springsync.request.ThreadedCounter;
 import com.springsync.response.ThreadedCounterResult;
-import com.springsync.springsync.services.CounterService;
+import com.springsync.services.CounterService;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import org.springframework.beans.factory.annotation.Autowired;
