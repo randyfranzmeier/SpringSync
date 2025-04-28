@@ -4,13 +4,13 @@ This project contains 3 Spring Boot API's that deal with threads to enhance my u
 # Author
 Randy Franzmeier
 
-# Future goals
-Although I accomplished everything I wanted to, I may in the future add more endpoints or use the existing endpoints to graph the time it took for certain operations for a better understanding of the way threads impact performance.
+# User Interface
+![image](https://github.com/user-attachments/assets/e551ab88-50d2-4165-8ba1-d255d71b086c)
 
 # How to run
 ## Start the frontend by
-* Navigating to multi-threading/src/main/resources/static/concurrency
+* Navigating to frontend/
 * Running "npm start"
 ## Start the backend by
-* Navigating to the file MultiThreadedApisApplication.java in the multithreadedapis folder
+* Navigating to the spring-sync/src/main/java/com/springsync/SpringSyncApplication.java
 * Run this file and the server should start and print "Successfully started server!"
