@@ -6,6 +6,7 @@ import { Player, PlayerHandler, ThreadedPlayerRequest } from "../../../models/Pl
 import { InstructionHeader, ResponseContainer, TopMargin } from "../component-styles";
 import { THREAD } from "../../../constants/Threads";
 import { BUTTON_TEXT } from '../../../constants/Counter';
+import { validateNumericInputs } from '../../../services/validation';
 
 function PlayerGenerationSection({ useThreads = false }) {
    let controller = useRef(null);
@@ -14,47 +15,31 @@ function PlayerGenerationSection({ useThreads = false }) {
    const [playerHandler, setPlayerHandler] = useState(new PlayerHandler("", false, BUTTON_TEXT.CREATE, false));
    const [response, setResponse] = useState(null);
 
-
-   let validateNumThreads = () => {
-      if (numberThreadsRef.current.value.length === 0) {
-         setPlayerHandler(new PlayerHandler("Please enter the number of threads", true, BUTTON_TEXT.CREATE, false));
-         return false;
-      }
-      else if (numberThreadsRef.current.value <= 0) {
-         setPlayerHandler(new PlayerHandler("You must have at least 1 thread", true, BUTTON_TEXT.CREATE, false));
-         return false;
-      }
-      else if (numberThreadsRef.current.value > THREAD.LIMIT) {
-         setPlayerHandler(new PlayerHandler(`You must enter a number less than or equal to ${THREAD.LIMIT}`, true, BUTTON_TEXT.CREATE, false));
-         return false;
-      }
-      return true;
-   }
-
    let validateInputs = () => {
-      // validate number of players
-      if (numberPlayersRef.current.value.length === 0) {
-         setPlayerHandler(new PlayerHandler("Please enter the number of players", true, BUTTON_TEXT.CREATE, false));
-         return false;
-      }
-      else if (numberPlayersRef.current.value <= 0) {
-         setPlayerHandler(new PlayerHandler("You must create at least 1 player", true, BUTTON_TEXT.CREATE, false));
-         return false;
-      }
-      else if (numberPlayersRef.current.value > PLAYER.CREATE_LIMIT) {
-         setPlayerHandler(new PlayerHandler(`You must enter a number less than or equal to ${PLAYER.CREATE_LIMIT}`, true, BUTTON_TEXT.CREATE, false));
-         return false;
-      }
-
-      // validate threads if used
-      return useThreads ? validateNumThreads() : true;
-   }
+      let valid = true;
+        // validate number of players
+        if (!validateNumericInputs(numberPlayersRef.current.value, 1, PLAYER.CREATE_LIMIT)) {
+          valid = false;
+          setPlayerHandler(new PlayerHandler(`You must enter a number between 1 and ${PLAYER.CREATE_LIMIT}, inclusive`, true, BUTTON_TEXT.CREATE, false));
+        }
+        // validate threads if used
+        if (useThreads) {
+          if (!validateNumericInputs(numberThreadsRef.current.value, 1, THREAD.LIMIT)) {
+            // We don't want multiple error messages, just simplifying it with a generic one for them both.
+            let errMsg = !valid ? "Invalid Inputs, please enter a number and in the correct range" : `You must enter a number between 1 and ${THREAD.LIMIT}, inclusive`;
+            valid = false;
+            setPlayerHandler(new PlayerHandler(errMsg, true, BUTTON_TEXT.CREATE, false));
+          }
+        }
+  
+        return valid;
+     }
 
 
    let fetchPlayersAsync = async () => {
       if (useThreads) {
          const body = new ThreadedPlayerRequest(Number(numberThreadsRef.current.value), Number(numberPlayersRef.current.value));
-         return fetch(API_URLS.CreatePlayersWithThreads, {
+         return await fetch(API_URLS.CreatePlayersWithThreads, {
             method: "POST",
             signal: controller.current.signal,
             mode: "cors",
@@ -63,7 +48,7 @@ function PlayerGenerationSection({ useThreads = false }) {
          });
       }
       else {
-         return fetch(`${API_URLS.CreatePlayerNoThreads}${numberPlayersRef.current.value}`, {
+         return await fetch(`${API_URLS.CreatePlayerNoThreads}${numberPlayersRef.current.value}`, {
             method: "GET",
             signal: controller.current.signal,
             mode: "cors",
@@ -83,9 +68,10 @@ function PlayerGenerationSection({ useThreads = false }) {
          setResponse(null);
       }
       else {
+         // Reset response
+         setResponse(null);
+
          if (validateInputs()) {
-            // Reset response
-            setResponse(null);
             controller.current = new AbortController();
 
             // eliminate existing error messages
@@ -131,7 +117,7 @@ function PlayerGenerationSection({ useThreads = false }) {
          </TopMargin>
       </Grid2>}
       {response && <ResponseContainer>
-         <div style={{ width: 50 + "%", border: 1 + "px " + "solid " + "#e0dcdc" }}>
+         <div>
             <h3>Response Details</h3>
             <h4>Time: {response.time} ms</h4>
             <h4>Players Created: {response.playersCreated}</h4>

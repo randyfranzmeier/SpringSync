@@ -5,5 +5,5 @@ export const NoThreadsPlayerWrapper = styled.div`
 `;
 
 export const PlayersWithThreadsWrapper = styled.div`
-    border-top: 2px solid black;
+    margin-top: 2px solid black;
 `;
