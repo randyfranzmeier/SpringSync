@@ -9,8 +9,8 @@ Randy Franzmeier
 
 # How to run
 ## Start the frontend by
-* Navigating to frontend/
+* Navigating to the frontend folder
 * Running "npm start"
 ## Start the backend by
-* Navigating to the spring-sync/src/main/java/com/springsync/SpringSyncApplication.java
+* Navigating to spring-sync/src/main/java/com/springsync/SpringSyncApplication.java
 * Run this file and the server should start and print "Successfully started server!"
